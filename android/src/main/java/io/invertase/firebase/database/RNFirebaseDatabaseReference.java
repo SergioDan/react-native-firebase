@@ -174,7 +174,7 @@ class RNFirebaseDatabaseReference {
       @Override
       public void onDataChange(@Nonnull DataSnapshot dataSnapshot) {
         if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.HONEYCOMB) {
-          asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dataSnapshot, previousChildName);
+          asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dataSnapshot, null);
         } else {
           asyncTask.execute(dataSnapshot, null);
         }
