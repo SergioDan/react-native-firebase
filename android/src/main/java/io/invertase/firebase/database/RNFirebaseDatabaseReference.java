@@ -2,6 +2,7 @@ package io.invertase.firebase.database;
 
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
@@ -172,7 +173,11 @@ class RNFirebaseDatabaseReference {
     ValueEventListener onceValueEventListener = new ValueEventListener() {
       @Override
       public void onDataChange(@Nonnull DataSnapshot dataSnapshot) {
-        asyncTask.execute(dataSnapshot, null);
+        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.HONEYCOMB) {
+          asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dataSnapshot, previousChildName);
+        } else {
+          asyncTask.execute(dataSnapshot, null);
+        }
       }
 
       @Override
@@ -375,7 +380,11 @@ class RNFirebaseDatabaseReference {
       }
     };
 
-    asyncTask.execute(dataSnapshot, previousChildName);
+    if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.HONEYCOMB) {
+      asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dataSnapshot, previousChildName);
+    } else {
+      asyncTask.execute(dataSnapshot, previousChildName);
+    }
   }
 
   /**
